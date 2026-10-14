@@ -1,0 +1,41 @@
+def is_safe(region, color, colors, graph):
+    for neighbor in graph[region]:
+        if colors.get(neighbor) == color:
+            return False
+    return True
+
+
+def map_coloring(graph, color_list, colors):
+    if len(colors) == len(graph):
+        return True
+
+    region = next(r for r in graph if r not in colors)
+
+    for color in color_list:
+        if is_safe(region, color, colors, graph):
+            colors[region] = color
+
+            if map_coloring(graph, color_list, colors):
+                return True
+
+            del colors[region]
+
+    return False
+
+
+graph = {
+    'A': ['B', 'C'],
+    'B': ['A', 'C', 'D'],
+    'C': ['A', 'B', 'D'],
+    'D': ['B', 'C']
+}
+
+color_list = ['Red', 'Green', 'Blue']
+colors = {}
+
+if map_coloring(graph, color_list, colors):
+    print("Map Coloring Solution:")
+    for region, color in colors.items():
+        print(region, ":", color)
+else:
+    print("No solution found")
