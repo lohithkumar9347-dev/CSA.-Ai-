@@ -1,0 +1,18 @@
+def minimax(depth, is_max):
+    scores = [-1, 0, 1]
+
+    if depth == 0:
+        return 0
+
+    if is_max:
+        best = -999
+        for score in scores:
+            best = max(best, score)
+        return best
+    else:
+        best = 999
+        for score in scores:
+            best = min(best, score)
+        return best
+
+print("Best score:", minimax(1, True))
