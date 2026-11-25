@@ -1,0 +1,77 @@
+import math
+
+board = [" "] * 9
+
+def winner(b):
+    wins = [(0,1,2),(3,4,5),(6,7,8),
+            (0,3,6),(1,4,7),(2,5,8),
+            (0,4,8),(2,4,6)]
+
+    for a, c, d in wins:
+        if b[a] == b[c] == b[d] != " ":
+            return b[a]
+    return None
+
+def minimax(b, depth, alpha, beta, is_max):
+    w = winner(b)
+
+    if w == "O":
+        return 10 - depth
+    if w == "X":
+        return depth - 10
+    if " " not in b:
+        return 0
+
+    if is_max:
+        best = -math.inf
+        for i in range(9):
+            if b[i] == " ":
+                b[i] = "O"
+                best = max(best, minimax(b, depth+1,
+                                         alpha, beta, False))
+                b[i] = " "
+                alpha = max(alpha, best)
+                if beta <= alpha:
+                    break
+        return best
+
+    else:
+        best = math.inf
+        for i in range(9):
+            if b[i] == " ":
+                b[i] = "X"
+                best = min(best, minimax(b, depth+1,
+                                         alpha, beta, True))
+                b[i] = " "
+                beta = min(beta, best)
+                if beta <= alpha:
+                    break
+        return best
+
+def ai_move():
+    best = -math.inf
+    move = -1
+
+    for i in range(9):
+        if board[i] == " ":
+            board[i] = "O"
+            score = minimax(board, 0, -math.inf,
+                            math.inf, False)
+            board[i] = " "
+
+            if score > best:
+                best = score
+                move = i
+
+    board[move] = "O"
+    print("Best move selected by AI:", move + 1)
+
+def display():
+    for i in range(0, 9, 3):
+        print("|".join(board[i:i+3]))
+        if i < 6:
+            print("-----")
+
+display()
+ai_move()
+display()
