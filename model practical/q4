@@ -1,0 +1,30 @@
+% Facts: road(City1, City2, Distance)
+
+road(a, b, 4).
+road(a, c, 2).
+road(b, c, 1).
+road(b, d, 5).
+road(c, d, 8).
+road(c, e, 10).
+road(d, e, 2).
+
+% Two-way connection
+connected(X, Y, D) :- road(X, Y, D).
+connected(X, Y, D) :- road(Y, X, D).
+
+% Recursive route finding
+route(X, Y, Path, Distance) :-
+    travel(X, Y, [X], RevPath, Distance),
+    reverse(RevPath, Path).
+
+travel(X, X, Visited, Visited, 0).
+
+travel(X, Y, Visited, Path, Distance) :-
+    connected(X, Z, D),
+    \+ member(Z, Visited),
+    travel(Z, Y, [Z|Visited], Path, D1),
+    Distance is D + D1.
+
+% Find shortest route
+shortest_route(X, Y, Path, Distance) :-
+    setof(D-P, route(X, Y, P, D), [Distance-Path|_]).
