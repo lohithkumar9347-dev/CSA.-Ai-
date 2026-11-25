@@ -1,0 +1,20 @@
+% Facts
+cloudy.
+windy.
+sunny.
+rainy.
+
+% Rules
+will_rain :- cloudy, windy.
+will_rain :- rainy.
+
+will_not_rain :- sunny.
+
+% Prediction
+predict :-
+    will_rain,
+    write('It will rain.').
+
+predict :-
+    will_not_rain,
+    write('It will not rain.').
